@@ -27,6 +27,8 @@ def dijsktra(initial, nodes, edges, distances):
       break
 
     nodes.remove(min_node)
+    if min_node == "246":
+        break
     current_weight = visited[min_node]
 
     for edge in edges[min_node]:
@@ -59,5 +61,24 @@ if __name__ == "__main__":
         distances[(str(e["source"]),str(e["target"]))] = e["cost"]
         #didirectional
         distances[(str(e["target"]),str(e["source"]))] = e["cost"]
-
-    path1 = dijsktra("18",nodes2,edges2,distances)
+    #get min distances to all nodes
+    minpaths = dijsktra("18",nodes2,edges2,distances)
+    
+    #path to planet
+    path = []
+    path.append("246")
+    #find path in min paths
+    node = minpaths[1]["246"]
+    path.append(node)
+    for n in nodes:
+        node = minpaths[1][node]
+        path.append(node)
+        if node == "18":
+            break
+    #sum distance
+    cost = 0
+    for i in range(len(path) - 1):
+        cost += distances[path[i],path[i+1]]
+    #sort it the right way
+    path.reverse()
+    print("Pfad: {}\nDistanz: {}".format(path,cost))
